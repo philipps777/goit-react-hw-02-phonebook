@@ -14,18 +14,23 @@ export class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
   handleAddContact = newContact => {
+    const { contacts } = this.state;
     const contactWithId = { ...newContact, id: nanoid() };
+
+    if (contacts.some(contact => contact.name === newContact.name)) {
+      alert(`${newContact.name} is already in your contacts.`);
+      return;
+    }
+
     this.setState(prevState => ({
       contacts: [...prevState.contacts, contactWithId],
     }));
   };
 
-  setFilter = filterValue => {
+  handleFilterChange = filterValue => {
     this.setState({ filter: filterValue });
   };
 
@@ -43,21 +48,14 @@ export class App extends Component {
   };
 
   render() {
-    const { name, number, filter } = this.state;
+    const { filter } = this.state;
 
     return (
       <Wrapper>
         <h2>Phonebook</h2>
-        <ContactForm
-          onAdd={this.handleAddContact}
-          contacts={this.state.contacts}
-          name={name}
-          number={number}
-          onNameChange={newName => this.setState({ name: newName })}
-          onNumberChange={newNumber => this.setState({ number: newNumber })}
-        />
+        <ContactForm onAdd={this.handleAddContact} />
         <h2>Contacts</h2>
-        <Filter value={filter} onChange={this.setFilter} />
+        <Filter value={filter} onChange={this.handleFilterChange} />
         <ContactList
           contacts={this.getFilteredContacts()}
           onDelete={this.handleDeleteContact}

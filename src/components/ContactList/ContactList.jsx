@@ -1,4 +1,5 @@
-import { List, Li, ButtonList, Number } from './ContactList.styled';
+import { List } from './ContactList.styled';
+import { ContactItem } from './ContactItem';
 
 export const ContactList = ({ contacts, onDelete }) => (
   <List>
@@ -6,11 +7,4 @@ export const ContactList = ({ contacts, onDelete }) => (
       <ContactItem key={contact.id} contact={contact} onDelete={onDelete} />
     ))}
   </List>
-);
-
-export const ContactItem = ({ contact, onDelete }) => (
-  <Li>
-    {contact.name}: <Number>{contact.number}</Number>
-    <ButtonList onClick={() => onDelete(contact.id)}>Delete</ButtonList>
-  </Li>
 );

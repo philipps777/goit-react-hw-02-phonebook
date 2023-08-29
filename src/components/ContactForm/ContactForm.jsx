@@ -1,45 +1,51 @@
 import { Form, FormWrapper, Button, Input } from './ContactForm.styled';
+import { Component } from 'react';
 
-export const ContactForm = ({
-  onAdd,
-  contacts,
-  name,
-  number,
-  onNameChange,
-  onNumberChange,
-}) => {
-  const handleSubmit = e => {
-    e.preventDefault();
-    if (contacts.some(contact => contact.name === name)) {
-      alert(`${name} is already in your contacts.`);
-      return;
-    }
-    onAdd({ name, number });
-    onNameChange('');
-    onNumberChange('');
+export class ContactForm extends Component {
+  state = {
+    name: '',
+    number: '',
   };
 
-  return (
-    <FormWrapper>
-      <Form onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          name="name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces."
-          value={name}
-          onChange={e => onNameChange(e.target.value)}
-          required
-        />
-        <Input
-          type="text"
-          name="number"
-          value={number}
-          onChange={e => onNumberChange(e.target.value)}
-          required
-        />
-        <Button type="submit">Add Contact</Button>
-      </Form>
-    </FormWrapper>
-  );
-};
+  handleSubmit = e => {
+    e.preventDefault();
+    const { name, number } = this.state;
+    const { onAdd } = this.props;
+
+    onAdd({ name, number });
+    this.setState({ name: '', number: '' });
+  };
+
+  handleInputChange = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  render() {
+    const { name, number } = this.state;
+
+    return (
+      <FormWrapper>
+        <Form onSubmit={this.handleSubmit}>
+          <Input
+            type="text"
+            name="name"
+            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+            title="Name may contain only letters, apostrophe, dash and spaces."
+            value={name}
+            onChange={this.handleInputChange}
+            required
+          />
+          <Input
+            type="text"
+            name="number"
+            value={number}
+            onChange={this.handleInputChange}
+            required
+          />
+          <Button type="submit">Add Contact</Button>
+        </Form>
+      </FormWrapper>
+    );
+  }
+}
